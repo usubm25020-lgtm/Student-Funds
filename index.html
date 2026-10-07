@@ -3,177 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>StudentFund | Fast Cloud Edition</title>
+    <title>StudentFund | Pro Edition</title>
     
-    <!-- Material Symbols -->
+    <!-- Material Symbols (Professional Icons) -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Chart.js & PDF Libraries for Analytics & Passbook -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
     <style>
         /* ==========================================================================
-           1. CSS VARIABLES & PREMIUM DARK THEME
+           1. CSS VARIABLES & PREMIUM UI THEME (Glassmorphism + Neon)
            ========================================================================== */
         :root {
-            --bg-base: #09090b;       
-            --bg-surface: #18181b;    
-            --bg-elevated: #27272a;   
-            --primary: #06b6d4;       
-            --primary-glow: rgba(6, 182, 212, 0.25);
+            --bg-base: #020617;       
+            --bg-surface: #0f172a;    
+            --bg-elevated: #1e293b;   
+            --bg-glass: rgba(15, 23, 42, 0.75);
+            
+            --primary: #0ea5e9;       
+            --primary-glow: rgba(14, 165, 233, 0.35);
             --secondary: #8b5cf6;     
+            --accent: #f43f5e;        
+            
             --success: #10b981;       
             --danger: #ef4444;        
-            --danger-bg: rgba(239, 68, 68, 0.1);
+            --danger-bg: rgba(239, 68, 68, 0.15);
             --warning: #f59e0b;       
-            --text-main: #f8fafc;
-            --text-muted: #a1a1aa;
-            --border: #3f3f46;
             
-            --radius-md: 12px;
-            --radius-lg: 20px;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.12);
+            
+            --radius-md: 16px;
+            --radius-lg: 24px;
             --radius-pill: 9999px;
-            --nav-height: 70px;
-            --header-height: 65px;
-            --transition: all 0.2s ease-in-out;
+            --nav-height: 75px;
+            --header-height: 70px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         html, body {
             height: 100%; width: 100%; overflow: hidden; 
             background-color: var(--bg-base); color: var(--text-main); font-size: 15px;
         }
 
-        h1, h2, h3 { color: var(--text-main); font-weight: 700; margin-bottom: 0.5rem; }
+        h1, h2, h3 { color: var(--text-main); font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
         .text-sm { font-size: 0.875rem; } .text-xs { font-size: 0.75rem; }
         .text-muted { color: var(--text-muted); } .text-success { color: var(--success); }
         .text-danger { color: var(--danger); } .text-primary { color: var(--primary); }
         .text-warning { color: var(--warning); } .font-bold { font-weight: 700; }
         .text-center { text-align: center; }
 
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;
+        }
+
         /* ==========================================================================
-           2. UI COMPONENTS
+           2. UI COMPONENTS & INPUTS
            ========================================================================== */
-        .form-group { margin-bottom: 1rem; width: 100%; text-align: left; }
-        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;}
+        .form-group { margin-bottom: 1.2rem; width: 100%; text-align: left; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;}
         input[type="text"], input[type="password"], input[type="number"], select {
-            width: 100%; padding: 14px 16px; background: var(--bg-base); border: 1px solid var(--border);
+            width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.25); border: 1px solid var(--border);
             color: var(--text-main); border-radius: var(--radius-md); font-size: 1rem; outline: none; transition: var(--transition);
         }
-        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); background: rgba(0,0,0,0.5); }
         
         .btn {
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             padding: 14px 20px; border-radius: var(--radius-md); border: none;
             font-weight: 600; font-size: 1rem; cursor: pointer; transition: var(--transition); width: 100%;
         }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn:active:not(:disabled) { transform: scale(0.97); }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; box-shadow: 0 4px 15px var(--primary-glow); }
-        .btn-secondary { background: var(--bg-elevated); color: var(--text-main); border: 1px solid var(--border); }
-        .btn-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
-        .btn-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn:active:not(:disabled) { transform: scale(0.96); }
         
-        .btn-icon { width: 40px; height: 40px; padding: 0; border-radius: 50%; background: var(--bg-elevated); color: var(--text-main); display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); cursor: pointer; transition: var(--transition); }
-        .btn-icon:active { transform: scale(0.9); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; box-shadow: 0 4px 20px var(--primary-glow); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-secondary { background: var(--bg-elevated); color: var(--text-main); border: 1px solid var(--border); }
+        .btn-danger { background: linear-gradient(135deg, var(--danger), #b91c1c); color: white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+        .btn-warning { background: linear-gradient(135deg, var(--warning), #d97706); color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
+        .btn-success { background: linear-gradient(135deg, var(--success), #047857); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        
+        .btn-icon { width: 42px; height: 42px; padding: 0; border-radius: 50%; background: var(--bg-elevated); color: var(--text-main); display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); cursor: pointer; transition: var(--transition); }
+        .btn-icon:active { transform: scale(0.9); background: var(--border); }
 
-        .card { background: var(--bg-surface); border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--border); margin-bottom: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .card { 
+            background: var(--bg-glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--border); 
+            margin-bottom: 16px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25); 
+        }
+        
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         .flex-center { display: flex; justify-content: center; align-items: center; }
         .gap-2 { gap: 8px; display: flex; } .gap-3 { gap: 12px; display: flex; flex-direction: column; }
         
-        .badge { padding: 4px 10px; border-radius: var(--radius-pill); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .badge.active { background: rgba(16, 185, 129, 0.15); color: var(--success); }
-        .badge.admin { background: rgba(139, 92, 246, 0.2); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.4); }
-        .badge.superadmin { background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4); }
+        .badge { padding: 5px 12px; border-radius: var(--radius-pill); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge.active { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge.admin { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.5); }
+        .badge.superadmin { background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; box-shadow: 0 2px 10px rgba(245, 158, 11, 0.4); border: 1px solid rgba(255,255,255,0.2); }
+        .badge.suspended { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
         
-        .avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--bg-elevated), var(--border)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; border: 2px solid var(--border); flex-shrink: 0; text-transform: uppercase; }
+        /* Premium Achievement Badges */
+        .badge-honor { background: linear-gradient(135deg, #fbbf24, #d97706); color: white; border: 1px solid rgba(251, 191, 36, 0.5); font-size: 0.65rem; padding: 4px 8px; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3); display: inline-flex; align-items: center; gap: 4px; }
+        .badge-punctual { background: linear-gradient(135deg, #10b981, #059669); color: white; border: 1px solid rgba(16, 185, 129, 0.5); font-size: 0.65rem; padding: 4px 8px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 4px; }
+
+        .avatar { width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, var(--bg-elevated), #334155); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 700; border: 2px solid var(--border); flex-shrink: 0; text-transform: uppercase; color: white; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .avatar-edit { position: absolute; bottom: -2px; right: -2px; background: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--bg-surface); cursor: pointer; color: white; transition: var(--transition); }
+        .avatar-edit:active { transform: scale(0.9); }
 
         .search-box { position: relative; margin-bottom: 16px; }
-        .search-box input { padding-left: 44px; }
-        .search-box .material-symbols-rounded { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-box input { padding-left: 44px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.05); }
+        .search-box .material-symbols-rounded { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        .student-check-list { max-height: 250px; overflow-y: auto; background: var(--bg-base); border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 12px; }
+        .progress-container { width: 100%; height: 8px; background: rgba(0,0,0,0.3); border-radius: var(--radius-pill); overflow: hidden; margin-top: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: var(--radius-pill); transition: width 1s ease-out; box-shadow: 0 0 10px var(--primary-glow); }
+
+        .student-check-list { max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 12px; }
         .student-check-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; }
         .student-check-item:last-child { border-bottom: none; }
         .student-check-item:active { background: var(--bg-elevated); }
         .student-check-item input[type="checkbox"] { width: 22px; height: 22px; margin-right: 12px; accent-color: var(--primary); pointer-events: none; }
 
         /* ==========================================================================
-           3. APP LAYOUT & LOADER
+           3. APP LAYOUT STRUCTURE & LIGHTBOX
            ========================================================================== */
         #loader-view { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg-base); z-index: 9999; }
-        .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 20px; }
+        .spinner { width: 45px; height: 45px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* Full Screen Image Review (Lightbox) */
+        #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
+        #lightbox img { max-width: 90%; max-height: 80%; border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; }
+        .close-lightbox { position: absolute; top: 30px; right: 30px; color: white; font-size: 36px; cursor: pointer; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: var(--transition); }
+        .close-lightbox:active { transform: scale(0.9); background: var(--danger); }
+
         #auth-view { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(circle at top, var(--bg-surface), var(--bg-base)); z-index: 100; overflow-y: auto; display: none; }
-        .auth-box { width: 100%; max-width: 400px; background: var(--bg-surface); border-radius: var(--radius-lg); padding: 30px 24px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .auth-tabs { display: flex; margin-bottom: 24px; background: var(--bg-base); border-radius: var(--radius-md); padding: 4px; }
-        .auth-tab { flex: 1; padding: 12px; text-align: center; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: var(--transition); font-size: 0.9rem; }
-        .auth-tab.active { background: var(--bg-elevated); color: var(--text-main); }
+        .auth-box { width: 100%; max-width: 400px; background: var(--bg-glass); backdrop-filter: blur(20px); border-radius: var(--radius-lg); padding: 32px 24px; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .auth-tabs { display: flex; margin-bottom: 24px; background: rgba(0,0,0,0.3); border-radius: var(--radius-md); padding: 5px; }
+        .auth-tab { flex: 1; padding: 12px; text-align: center; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 10px; transition: var(--transition); font-size: 0.95rem; }
+        .auth-tab.active { background: var(--bg-elevated); color: var(--text-main); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .hidden { display: none !important; }
 
         #main-view { display: none; flex-direction: column; height: 100%; width: 100%; position: relative; }
         
-        .app-header { position: absolute; top: 0; left: 0; right: 0; height: var(--header-height); padding: 0 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(24, 24, 27, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 40; }
-        .app-title { font-size: 1.25rem; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 8px; }
+        .app-header { position: absolute; top: 0; left: 0; right: 0; height: var(--header-height); padding: 0 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); z-index: 40; }
+        .app-title { font-size: 1.4rem; display: flex; align-items: center; gap: 8px; }
         
         .app-content { position: absolute; top: var(--header-height); bottom: var(--nav-height); left: 0; right: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 20px; padding-bottom: 40px; }
         
-        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: rgba(24, 24, 27, 0.95); backdrop-filter: blur(16px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 50; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); gap: 4px; width: 65px; height: 100%; text-decoration: none; transition: var(--transition); cursor: pointer; }
+        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 50; padding-bottom: env(safe-area-inset-bottom); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); gap: 4px; width: 65px; height: 100%; text-decoration: none; transition: var(--transition); cursor: pointer; position: relative; }
         .nav-item .material-symbols-rounded { font-size: 26px; transition: transform 0.2s; }
-        .nav-item span { font-size: 0.65rem; font-weight: 600; }
+        .nav-item span { font-size: 0.7rem; font-weight: 600; }
         .nav-item.active { color: var(--primary); }
-        .nav-item.active .material-symbols-rounded { font-variation-settings: 'FILL' 1; transform: translateY(-2px); }
+        .nav-item.active .material-symbols-rounded { font-variation-settings: 'FILL' 1; transform: translateY(-3px); }
+        .nav-badge { position: absolute; top: 8px; right: 18px; width: 10px; height: 10px; background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-surface); display: none; }
 
         /* ==========================================================================
-           4. DATA LISTS
+           4. DATA LISTS & LEADERBOARD
            ========================================================================== */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
-        .stat-card { background: var(--bg-surface); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; }
-        .stat-card h3 { font-size: 1.4rem; margin: 4px 0 0 0; }
-        .stat-card .icon { padding: 6px; border-radius: 8px; display: inline-block; margin-bottom: 8px; width: fit-content; }
+        .stat-card { background: var(--bg-glass); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(10px); }
+        .stat-card h3 { font-size: 1.5rem; margin: 4px 0 0 0; }
+        .stat-card .icon { padding: 8px; border-radius: 10px; display: inline-block; margin-bottom: 10px; width: fit-content; }
         
-        .list-item { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: transform 0.1s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .list-item { background: var(--bg-glass); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: transform 0.1s, background 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.15); backdrop-filter: blur(8px); }
         .list-item:active { transform: scale(0.98); background: var(--bg-elevated); }
-        .negative-bal-bg { background: linear-gradient(to right, var(--bg-surface), var(--danger-bg)); border-color: rgba(239, 68, 68, 0.3); }
+        .negative-bal-bg { background: linear-gradient(to right, var(--bg-surface), rgba(239, 68, 68, 0.08)); border-color: rgba(239, 68, 68, 0.3); }
+
+        .rank-1 { border-color: #fbbf24; background: linear-gradient(to right, rgba(251, 191, 36, 0.15), transparent); }
+        .rank-2 { border-color: #94a3b8; background: linear-gradient(to right, rgba(148, 163, 184, 0.15), transparent); }
+        .rank-3 { border-color: #d97706; background: linear-gradient(to right, rgba(217, 119, 6, 0.15), transparent); }
 
         /* ==========================================================================
            5. MODALS & TOASTS
            ========================================================================== */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1000; display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 1000; display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         
-        .modal-content { background: var(--bg-surface); width: 100%; max-width: 500px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); border-top: 1px solid var(--border); max-height: 85vh; overflow-y: auto; }
+        .modal-content { background: var(--bg-surface); width: 100%; max-width: 500px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 24px; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-top: 1px solid var(--border); max-height: 90vh; overflow-y: auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.6); }
         .modal-overlay.active .modal-content { transform: translateY(0); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 
-        #toast-box { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--bg-elevated); border: 1px solid var(--border); padding: 12px 24px; border-radius: var(--radius-pill); z-index: 2000; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-weight: 600; white-space: nowrap; }
+        #toast-box { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--bg-elevated); border: 1px solid var(--border); padding: 14px 24px; border-radius: var(--radius-pill); z-index: 2000; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-weight: 600; white-space: nowrap; backdrop-filter: blur(10px); }
         #toast-box.show { transform: translateX(-50%) translateY(0); }
 
         @media (min-width: 768px) {
             body { display: flex; justify-content: center; align-items: center; background: #000; }
-            #loader-view, #main-view, #auth-view { width: 400px; height: 850px; max-height: 100vh; position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+            #loader-view, #main-view, #auth-view { width: 420px; height: 900px; max-height: 100vh; position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 0 80px rgba(14, 165, 233, 0.15); }
             .modal-overlay { position: absolute; }
-            #toast-box { position: absolute; }
+            #toast-box { position: absolute; top: 30px; }
+            #lightbox { width: 420px; position: absolute; }
         }
     </style>
 </head>
 <body>
-
     <!-- LOADER VIEW -->
     <div id="loader-view">
         <div class="spinner"></div>
-        <h2 style="font-size: 1.2rem; margin-top: 16px;">Connecting to Cloud...</h2>
-        <p class="text-muted text-sm">Optimizing loading speed</p>
+        <h2 style="font-size: 1.5rem; margin-top: 16px;" class="gradient-text">StudentFund</h2>
+        <p class="text-muted text-sm mt-2">Loading Premium Experience...</p>
+    </div>
+
+    <!-- FULL SCREEN IMAGE LIGHTBOX -->
+    <div id="lightbox" onclick="this.style.display='none'">
+        <span class="close-lightbox" onclick="document.getElementById('lightbox').style.display='none'">&times;</span>
+        <img id="lightbox-img" src="" alt="Full Profile" onclick="event.stopPropagation()">
     </div>
 
     <!-- AUTH VIEW -->
     <div id="auth-view">
         <div class="auth-box">
-            <div class="text-center" style="margin-bottom: 24px;">
-                <span class="material-symbols-rounded" style="font-size: 56px; color: var(--primary);">bolt</span>
-                <h1 style="font-size: 1.6rem; margin-top: 8px;">StudentFund</h1>
-                <p class="text-muted text-sm">Lightning Fast Cloud Sync</p>
+            <div class="text-center" style="margin-bottom: 30px;">
+                <span class="material-symbols-rounded gradient-text" style="font-size: 64px;">account_balance</span>
+                <h1 style="font-size: 1.8rem; margin-top: 12px;" class="gradient-text">StudentFund</h1>
+                <p class="text-muted text-sm">Corporate Edition</p>
             </div>
 
             <div class="auth-tabs">
@@ -190,13 +241,17 @@
                     <label class="form-label">Password</label>
                     <input type="password" id="login-pass" required placeholder="Enter password" autocomplete="current-password">
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 12px;">Secure Login</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 16px;">Secure Login</button>
             </form>
 
             <form id="form-register" class="hidden" onsubmit="AuthUI.register(event)">
                 <div class="form-group">
                     <label class="form-label">Full Name</label>
-                    <input type="text" id="reg-name" required placeholder="e.g. Usub Mondal">
+                    <input type="text" id="reg-name" required placeholder="e.g. Rahul Das">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number (WhatsApp)</label>
+                    <input type="number" id="reg-phone" required placeholder="10-digit mobile number">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Username</label>
@@ -206,7 +261,7 @@
                     <label class="form-label">Password</label>
                     <input type="password" id="reg-pass" required placeholder="Create a strong password">
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 12px;">Create Account</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 16px;" id="reg-btn">Create Account</button>
             </form>
         </div>
     </div>
@@ -215,12 +270,17 @@
     <div id="main-view">
         <header class="app-header">
             <div class="app-title">
-                <span class="material-symbols-rounded">account_balance_wallet</span> SFund
+                <span class="material-symbols-rounded" style="color: var(--primary);">account_balance_wallet</span> 
+                <span class="gradient-text">SFund</span>
             </div>
             <div style="display: flex; gap: 12px; align-items: center;">
                 <span class="badge" id="header-role-badge">ROLE</span>
-                <button class="btn-icon" onclick="Auth.logout()" title="Logout" style="width: 36px; height: 36px; border-color: rgba(239,68,68,0.4); color: var(--danger);">
-                    <span class="material-symbols-rounded" style="font-size: 18px;">logout</span>
+                <button class="btn-icon hidden" id="admin-bell" onclick="Router.go('approvals')" title="Approvals" style="position:relative;">
+                    <span class="material-symbols-rounded" style="font-size: 20px;">notifications</span>
+                    <div class="nav-badge" id="bell-badge"></div>
+                </button>
+                <button class="btn-icon" onclick="Auth.logout()" title="Logout" style="border-color: rgba(239,68,68,0.3); color: var(--danger);">
+                    <span class="material-symbols-rounded" style="font-size: 20px;">power_settings_new</span>
                 </button>
             </div>
         </header>
@@ -229,16 +289,16 @@
 
         <nav class="bottom-nav" id="main-nav">
             <a class="nav-item active" onclick="Router.go('dashboard')" data-route="dashboard">
-                <span class="material-symbols-rounded">dashboard</span><span>Home</span>
+                <span class="material-symbols-rounded">space_dashboard</span><span>Home</span>
             </a>
             <a class="nav-item" onclick="Router.go('students')" data-route="students" id="nav-students">
-                <span class="material-symbols-rounded">groups</span><span>Members</span>
+                <span class="material-symbols-rounded">group</span><span>Members</span>
             </a>
             <a class="nav-item" onclick="Router.go('transactions')" data-route="transactions" id="nav-txns">
-                <span class="material-symbols-rounded">receipt_long</span><span>History</span>
+                <span class="material-symbols-rounded">history</span><span>History</span>
             </a>
             <a class="nav-item" onclick="Router.go('settings')" data-route="settings" id="nav-settings">
-                <span class="material-symbols-rounded">settings</span><span>Settings</span>
+                <span class="material-symbols-rounded">admin_panel_settings</span><span>Admin Area</span>
             </a>
         </nav>
     </div>
@@ -249,13 +309,16 @@
         <span class="material-symbols-rounded" id="toast-icon">info</span> 
         <span id="toast-msg">Message</span>
     </div>
+    
+    <!-- CANVAS FOR IMAGE COMPRESSION -->
+    <canvas id="img-canvas" style="display:none;"></canvas>
 
     <!-- ==========================================================================
-         APPLICATION LOGIC (FAST FIREBASE INTEGRATION)
+         APPLICATION LOGIC (FIREBASE & ADVANCED FEATURES)
          ========================================================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, writeBatch } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
         // 1. FIREBASE CONFIGURATION
         const firebaseConfig = {
@@ -270,52 +333,183 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 2. LOCAL STATE (Instant Updates source of truth)
-        const AppState = { users: [], txns: [], settings: { stuSeq: 1, txnSeq: 1 } };
-        const AppConfig = {
-            sessionKey: 'sfund_firebase_session_fast',
-            superAdmin: { id: 'ADM-USUB', name: 'Usub Mondal', username: 'Usub', password: btoa('usub413613'), role: 'superadmin', status: 'ACTIVE', joinDate: new Date().toISOString() }
+        // 2. GLOBAL STATE
+        const AppState = { 
+            users: [], txns: [], logs: [], pending_txns: [],
+            settings: { 
+                stuSeq: 1, txnSeq: 1, fundTarget: 10000, 
+                upiId: "", botToken: "", chatId: "",
+                dueAmount: 50, dueStartDay: 3, dueEndDay: 10 // Monthly Dues Config
+            } 
         };
-
-        const Utils = {
-            hash: (str) => btoa(str),
-            money: (amt) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amt),
-            date: (iso) => new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
-            genId: (prefix, num) => `${prefix}-${String(num).padStart(4, '0')}`,
-            toast: (msg, type = 'success') => {
-                const box = document.getElementById('toast-box');
-                document.getElementById('toast-msg').innerText = msg;
-                document.getElementById('toast-icon').innerText = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : 'info');
-                box.style.color = type === 'success' ? 'var(--success)' : (type === 'error' ? 'var(--danger)' : 'var(--text-main)');
-                box.style.borderColor = box.style.color;
-                box.classList.add('show');
-                setTimeout(() => box.classList.remove('show'), 3000);
+        
+        const AppConfig = {
+            sessionKey: 'sfund_corp_session',
+            superAdmin: { 
+                id: 'ADM-USUB', name: 'Usub Mondal', username: 'Usub', phone: '',
+                password: btoa('usub413613'), role: 'superadmin', status: 'ACTIVE', 
+                joinDate: new Date().toISOString(), photo: '' 
             }
         };
 
-        // 3. DATABASE LAYER (Optimized for Speed)
+        // 3. UTILITIES
+        const Utils = {
+            hash: (str) => btoa(str),
+            money: (amt) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amt),
+            date: (iso) => new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+            genId: (prefix, num) => `${prefix}-${String(num).padStart(4, '0')}`,
+            
+            toast: (msg, type = 'success') => {
+                const box = document.getElementById('toast-box');
+                document.getElementById('toast-msg').innerText = msg;
+                document.getElementById('toast-icon').innerText = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : (type === 'warning' ? 'warning' : 'info'));
+                box.style.color = type === 'success' ? 'var(--success)' : (type === 'error' ? 'var(--danger)' : (type === 'warning' ? 'var(--warning)' : 'var(--text-main)'));
+                box.style.borderColor = box.style.color;
+                box.classList.add('show');
+                setTimeout(() => box.classList.remove('show'), 3000);
+            },
+            
+            notifyTelegram: async (message) => {
+                const token = AppState.settings.botToken;
+                const chatId = AppState.settings.chatId;
+                if(!token || !chatId) return; 
+                try {
+                    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+                    await fetch(url, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+                    });
+                } catch (error) { console.error("Telegram error", error); }
+            },
+
+            sendWhatsAppReminder: (phone, amount) => {
+                if(!phone) return Utils.toast("No phone number found", "error");
+                const msg = `Hello, this is a gentle reminder from StudentFund. Your monthly fund due of ₹${amount} is pending. Please pay securely via the app. Thank you!`;
+                window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+            },
+            
+            compressImage: (file, callback) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = event => {
+                    const img = new Image(); img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.getElementById('img-canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 512; const MAX_HEIGHT = 512;
+                        let width = img.width; let height = img.height;
+
+                        if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
+                        else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
+
+                        canvas.width = width; canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        callback(canvas.toDataURL('image/jpeg', 0.85)); // High Quality
+                    }
+                }
+            },
+
+            // Dues Logic
+            checkDue: (studentId) => {
+                const today = new Date();
+                const currentDay = today.getDate();
+                const endDay = parseInt(AppState.settings.dueEndDay) || 10;
+                const dueAmt = parseInt(AppState.settings.dueAmount) || 50;
+
+                if(currentDay > endDay) {
+                    const monthTxns = AppState.txns.filter(t => {
+                        const tDate = new Date(t.date);
+                        return t.studentId === studentId && t.type === 'DEPOSIT' && tDate.getMonth() === today.getMonth() && tDate.getFullYear() === today.getFullYear();
+                    });
+                    const totalDepositedThisMonth = monthTxns.reduce((sum, t) => sum + t.amount, 0);
+                    if(totalDepositedThisMonth < dueAmt) {
+                        return { isDue: true, amount: dueAmt - totalDepositedThisMonth };
+                    }
+                }
+                return { isDue: false, amount: 0 };
+            },
+
+            // Early Payer Check (Paid before end day)
+            checkEarlyPayer: (studentId) => {
+                 const today = new Date();
+                 const endDay = parseInt(AppState.settings.dueEndDay) || 10;
+                 const earlyTxns = AppState.txns.filter(t => {
+                        const tDate = new Date(t.date);
+                        return t.studentId === studentId && t.type === 'DEPOSIT' && tDate.getMonth() === today.getMonth() && tDate.getFullYear() === today.getFullYear() && tDate.getDate() <= endDay;
+                 });
+                 return earlyTxns.length > 0;
+            },
+
+            // Generate Passbook PDF
+            generatePassbook: (user) => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const txns = AppState.txns.filter(t => t.studentId === user.id).reverse();
+                
+                doc.setFontSize(20);
+                doc.text("StudentFund - Official Statement", 14, 22);
+                doc.setFontSize(12);
+                doc.text(`Name: ${user.name}`, 14, 32);
+                doc.text(`ID: ${user.id}`, 14, 38);
+                doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 44);
+
+                const tableData = txns.map(t => [
+                    new Date(t.date).toLocaleDateString(),
+                    t.type,
+                    t.amount,
+                    t.newBal,
+                    t.note
+                ]);
+
+                doc.autoTable({
+                    startY: 50,
+                    head: [['Date', 'Type', 'Amount (INR)', 'Balance (INR)', 'Note']],
+                    body: tableData,
+                    theme: 'grid',
+                    headStyles: { fillColor: [14, 165, 233] }
+                });
+
+                doc.save(`Passbook_${user.name}_${user.id}.pdf`);
+                Utils.toast("Passbook Downloaded!");
+                DB.saveLogAsync(`📄 PDF DOWNLOAD: ${user.name} downloaded their statement.`);
+            },
+
+            downloadCSV: (data, filename) => {
+                if(data.length === 0) return Utils.toast("No data to export", "error");
+                const csvRows = []; const headers = Object.keys(data[0]);
+                csvRows.push(headers.join(','));
+                for (const row of data) {
+                    const values = headers.map(h => `"${String(row[h]||'').replace(/"/g, '""')}"`);
+                    csvRows.push(values.join(','));
+                }
+                const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.setAttribute('hidden', ''); a.setAttribute('href', url); a.setAttribute('download', filename);
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            }
+        };
+
+        // 4. DATABASE LAYER 
         const DB = {
             init: async () => {
                 try {
-                    // PARALLEL FETCHING - 3x faster initial load
-                    const [userSnap, txnSnap, setSnap] = await Promise.all([
-                        getDocs(collection(db, "users")),
-                        getDocs(collection(db, "transactions")),
-                        getDocs(collection(db, "settings"))
+                    const [userSnap, txnSnap, setSnap, logSnap, pendingSnap] = await Promise.all([
+                        getDocs(collection(db, "users")), getDocs(collection(db, "transactions")),
+                        getDocs(collection(db, "settings")), getDocs(collection(db, "logs")), getDocs(collection(db, "pending_txns"))
                     ]);
 
                     AppState.users = userSnap.docs.map(d => d.data());
                     AppState.txns = txnSnap.docs.map(d => d.data());
+                    AppState.logs = logSnap.docs.map(d => d.data());
+                    AppState.pending_txns = pendingSnap.docs.map(d => d.data());
                     
-                    if(setSnap.empty) {
-                        setDoc(doc(db, "settings", "global"), AppState.settings); // Background save
-                    } else {
-                        setSnap.forEach(d => { if(d.id === 'global') AppState.settings = d.data(); });
-                    }
+                    if(setSnap.empty) { setDoc(doc(db, "settings", "global"), AppState.settings); } 
+                    else { setSnap.forEach(d => { if(d.id === 'global') AppState.settings = { ...AppState.settings, ...d.data() }; }); }
 
                     if (AppState.users.length === 0) {
                         AppState.users.push(AppConfig.superAdmin);
-                        setDoc(doc(db, "users", AppConfig.superAdmin.id), AppConfig.superAdmin); // Background save
+                        setDoc(doc(db, "users", AppConfig.superAdmin.id), AppConfig.superAdmin);
                     }
                     return true;
                 } catch (e) {
@@ -325,20 +519,32 @@
                 }
             },
             getUser: (id) => AppState.users.find(u => u.id === id),
-            
-            // OPTIMISTIC UPDATES: We do NOT await network saves anymore.
-            // We update local AppState instantly, and send to Firebase in the background.
             saveUserAsync: (user) => {
                 const i = AppState.users.findIndex(u => u.id === user.id);
                 if (i >= 0) AppState.users[i] = user; else AppState.users.push(user);
-                setDoc(doc(db, "users", user.id), user).catch(console.error); // Async push
+                setDoc(doc(db, "users", user.id), user).catch(console.error);
             },
             saveTxnAsync: (txn) => {
                 AppState.txns.push(txn);
-                setDoc(doc(db, "transactions", txn.id), txn).catch(console.error); // Async push
+                setDoc(doc(db, "transactions", txn.id), txn).catch(console.error);
+            },
+            savePendingAsync: (pending) => {
+                AppState.pending_txns.push(pending);
+                setDoc(doc(db, "pending_txns", pending.id), pending).catch(console.error);
+                UI.updateBellIcon();
+            },
+            removePendingAsync: (id) => {
+                AppState.pending_txns = AppState.pending_txns.filter(p => p.id !== id);
+                deleteDoc(doc(db, "pending_txns", id)).catch(console.error);
+                UI.updateBellIcon();
+            },
+            saveLogAsync: (logMsg) => {
+                const log = { id: 'LOG-'+Date.now(), msg: logMsg, date: new Date().toISOString() };
+                AppState.logs.unshift(log);
+                setDoc(doc(db, "logs", log.id), log).catch(console.error);
             },
             saveSettingsAsync: () => {
-                setDoc(doc(db, "settings", "global"), AppState.settings).catch(console.error); // Async push
+                setDoc(doc(db, "settings", "global"), AppState.settings).catch(console.error);
             },
             calcBalance: (studentId) => {
                 const txns = AppState.txns.filter(t => t.studentId === studentId);
@@ -351,7 +557,7 @@
             }
         };
 
-        // 4. AUTHENTICATION
+        // 5. AUTHENTICATION
         const Auth = {
             user: null,
             init: () => {
@@ -366,9 +572,10 @@
                 const hash = Utils.hash(passStr);
                 const u = AppState.users.find(x => (x.username.toLowerCase() === userStr.toLowerCase() || x.id.toLowerCase() === userStr.toLowerCase()) && x.password === hash);
                 if (!u) return { success: false, msg: 'Invalid Credentials' };
-                if (u.status !== 'ACTIVE') return { success: false, msg: 'Account Inactive' };
+                if (u.status === 'SUSPENDED') return { success: false, msg: 'Account Suspended by Admin' };
                 Auth.user = u;
                 localStorage.setItem(AppConfig.sessionKey, JSON.stringify({ id: u.id }));
+                DB.saveLogAsync(`🔒 Login: ${u.name} logged in`);
                 return { success: true };
             },
             logout: () => {
@@ -377,17 +584,17 @@
                 document.getElementById('main-view').style.display = 'none';
                 document.getElementById('auth-view').style.display = 'flex';
                 document.getElementById('form-login').reset();
-                Utils.toast('Logged out successfully');
+                Utils.toast('Logged out securely');
             }
         };
-
-        // 5. FUND SERVICE (Instant Local Logic + Background Cloud Sync)
+        // 6. FUND SERVICE (Financial Operations & UTR Approvals)
         const FundService = {
             processSingle: (studentId, amt, type, note) => {
                 if (Auth.user.role === 'student') return { success: false, msg: 'Permission Denied' };
                 amt = parseFloat(amt);
                 if (isNaN(amt) || amt <= 0) return { success: false, msg: 'Invalid amount' };
                 
+                const stu = DB.getUser(studentId);
                 const { bal } = DB.calcBalance(studentId);
                 const seq = AppState.settings.txnSeq;
                 const txnId = Utils.genId('TXN', seq);
@@ -395,15 +602,22 @@
                 const txn = {
                     id: txnId, studentId, type, amount: amt,
                     prevBal: bal, newBal: type === 'DEPOSIT' ? bal + amt : bal - amt,
-                    date: new Date().toISOString(), by: Auth.user.name, note
+                    date: new Date().toISOString(), by: Auth.user.name, note: note || (type === 'DEPOSIT'?'Deposit':'Deduction')
                 };
 
-                // INSTANT UPDATE
+                // Instant Optimistic Updates
                 AppState.settings.txnSeq = seq + 1;
                 DB.saveTxnAsync(txn);
                 DB.saveSettingsAsync();
                 
-                return { success: true }; // Instant return
+                // Logging & Telegram Notify
+                const logMsg = `💰 ${type}: ₹${amt} ${type === 'DEPOSIT'?'added to':'deducted from'} ${stu.name} by ${Auth.user.name}`;
+                DB.saveLogAsync(logMsg);
+                
+                const emoji = type === 'DEPOSIT' ? '🟢' : '🔴';
+                Utils.notifyTelegram(`<b>${emoji} NEW TRANSACTION</b>\n\n👤 <b>Student:</b> ${stu.name} (${stu.id})\n💵 <b>Amount:</b> ₹${amt}\n📝 <b>Note:</b> ${txn.note}\n👮 <b>By:</b> ${Auth.user.name}\n💼 <b>New Balance:</b> ₹${txn.newBal}`);
+                
+                return { success: true }; 
             },
             
             processBulk: (studentIds, amt, type, note) => {
@@ -420,23 +634,59 @@
                     const txn = {
                         id: txnId, studentId: id, type, amount: amt,
                         prevBal: bal, newBal: type === 'DEPOSIT' ? bal + amt : bal - amt,
-                        date: new Date().toISOString(), by: Auth.user.name, note
+                        date: new Date().toISOString(), by: Auth.user.name, note: note || `Bulk ${type}`
                     };
-                    
-                    AppState.txns.push(txn); // INSTANT LOCAL UPDATE
-                    batch.set(doc(db, "transactions", txn.id), txn); // BATCH FOR CLOUD
+                    AppState.txns.push(txn);
+                    batch.set(doc(db, "transactions", txn.id), txn); 
                 });
 
                 AppState.settings.txnSeq = seq;
                 batch.set(doc(db, "settings", "global"), AppState.settings);
+                batch.commit().catch(e => console.error("Batch Error", e)); 
                 
-                batch.commit().catch(e => console.error("Batch Cloud Error", e)); // Fire & Forget in background
+                DB.saveLogAsync(`📊 BULK ${type}: ₹${amt} applied to ${studentIds.length} students by ${Auth.user.name}`);
+                const emoji = type === 'DEPOSIT' ? '🟢' : '🔴';
+                Utils.notifyTelegram(`<b>${emoji} BULK ${type}</b>\n\n👥 <b>Students:</b> ${studentIds.length} members\n💵 <b>Amount Per Student:</b> ₹${amt}\n💰 <b>Total Value:</b> ₹${amt * studentIds.length}\n📝 <b>Reason:</b> ${note}\n👮 <b>By:</b> ${Auth.user.name}`);
                 
-                return { success: true, count: studentIds.length }; // Instant return
+                return { success: true, count: studentIds.length }; 
+            },
+
+            submitUTR: (amount, utrNumber) => {
+                if(!amount || !utrNumber) return { success: false, msg: 'Missing info' };
+                const pending = {
+                    id: 'PND-' + Date.now(), studentId: Auth.user.id,
+                    amount: parseFloat(amount), utr: utrNumber,
+                    date: new Date().toISOString(), status: 'PENDING'
+                };
+                DB.savePendingAsync(pending);
+                DB.saveLogAsync(`⏳ UTR SUBMITTED: ${Auth.user.name} submitted UTR ${utrNumber} for ₹${amount}`);
+                Utils.notifyTelegram(`<b>⏳ PENDING APPROVAL</b>\n\n👤 <b>Student:</b> ${Auth.user.name}\n💵 <b>Amount:</b> ₹${amount}\n🔢 <b>UTR/Ref:</b> <code>${utrNumber}</code>\n\n<i>Please check app to approve.</i>`);
+                return { success: true };
+            },
+
+            approveUTR: (pendingId) => {
+                const p = AppState.pending_txns.find(x => x.id === pendingId);
+                if(!p) return;
+                const res = FundService.processSingle(p.studentId, p.amount, 'DEPOSIT', `Online Payment (UTR: ${p.utr})`);
+                if(res.success) {
+                    DB.removePendingAsync(pendingId);
+                    Utils.toast('Payment Approved!');
+                    Router.go('approvals');
+                }
+            },
+
+            rejectUTR: (pendingId) => {
+                const p = AppState.pending_txns.find(x => x.id === pendingId);
+                if(!p) return;
+                DB.removePendingAsync(pendingId);
+                DB.saveLogAsync(`❌ UTR REJECTED: UTR ${p.utr} from ${DB.getUser(p.studentId)?.name} rejected by ${Auth.user.name}`);
+                Utils.notifyTelegram(`<b>❌ PAYMENT REJECTED</b>\n\n👤 <b>Student:</b> ${DB.getUser(p.studentId)?.name}\n💵 <b>Amount:</b> ₹${p.amount}\n🔢 <b>UTR:</b> ${p.utr}\n👮 <b>Rejected By:</b> ${Auth.user.name}`);
+                Utils.toast('Payment Rejected', 'error');
+                Router.go('approvals');
             }
         };
 
-        // 6. ROUTER & VIEWS
+        // 7. APP ROUTER
         const Router = {
             current: 'dashboard',
             go: (route, param = null) => {
@@ -446,96 +696,184 @@
                 if(navBtn) navBtn.classList.add('active');
 
                 const content = document.getElementById('app-content');
-                // No setTimeout delay for lightning speed
                 switch(route) {
-                    case 'dashboard': content.innerHTML = Views.dashboard(); break;
+                    case 'dashboard': 
+                        content.innerHTML = Views.dashboard(); 
+                        if(Auth.user.role !== 'student') setTimeout(UI.renderChart, 100);
+                        break;
                     case 'students': content.innerHTML = Views.students(); break;
                     case 'profile': content.innerHTML = Views.profile(param); break;
                     case 'transactions': content.innerHTML = Views.transactions(); break;
                     case 'settings': content.innerHTML = Views.settings(); break;
+                    case 'logs': content.innerHTML = Views.logs(); break;
+                    case 'approvals': content.innerHTML = Views.approvals(); break;
                 }
                 content.scrollTo(0,0);
+                if(window.UI) UI.updateBellIcon();
             }
         };
 
+        // 8. VIEWS GENERATOR
         const Views = {
             dashboard: () => {
                 const u = Auth.user;
                 const isStu = u.role === 'student';
                 
+                // Get Students & Leaderboard 
+                const students = AppState.users.filter(x => x.role === 'student' && x.status !== 'SUSPENDED');
+                let leaderboard = students.map(s => {
+                    return { ...s, dep: DB.calcBalance(s.id).dep };
+                }).filter(s => s.dep > 0).sort((a,b) => b.dep - a.dep).slice(0, 5);
+                
+                const leaderboardHTML = leaderboard.length > 0 ? `
+                    <h3 style="margin: 24px 0 16px; font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
+                        <span class="material-symbols-rounded" style="color: #fbbf24;">workspace_premium</span> Top Contributors
+                    </h3>
+                    <div class="gap-3 mb-5">
+                        ${leaderboard.map((s, index) => `
+                            <div class="list-item rank-${index+1}" style="padding: 12px 16px; margin:0;" onclick="Router.go('profile', '${s.id}')">
+                                <div style="display:flex; gap:12px; align-items:center;">
+                                    <div class="font-bold text-muted" style="width:20px;">#${index+1}</div>
+                                    <div class="avatar" style="width:38px;height:38px;font-size:1rem; cursor:pointer; ${s.photo ? `background-image:url(${s.photo})`:''}" onclick="event.stopPropagation(); UI.openLightbox('${s.photo}')">${!s.photo ? s.name.charAt(0) : ''}</div>
+                                    <div class="font-bold text-sm">${s.name}${index===0 ? '<span class="material-symbols-rounded text-warning" style="font-size:14px; vertical-align:middle;">local_fire_department</span>':''}</div>
+                                </div>
+                                <div class="font-bold text-success">${Utils.money(s.dep)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '';
+
+                // ==========================================
+                // STUDENT VIEW
+                // ==========================================
                 if (isStu) {
                     const { bal, dep, ded } = DB.calcBalance(u.id);
+                    const dueCheck = Utils.checkDue(u.id);
+                    
                     return `
-                        <h2 style="margin-bottom: 4px;">Hello, ${u.name.split(' ')[0]} 👋</h2>
-                        <p class="text-muted" style="margin-bottom: 24px;">ID: ${u.id}</p>
-                        <div class="card" style="background: linear-gradient(135deg, var(--bg-surface), var(--bg-elevated)); text-align: center; padding: 32px 20px;">
-                            <div class="text-muted text-sm mb-2">My Fund Balance</div>
-                            <h1 style="font-size: 2.8rem; color: ${bal < 0 ? 'var(--danger)' : 'var(--primary)'}; margin: 8px 0;">${Utils.money(bal)}</h1>
+                        <div class="flex-between mb-2">
+                            <h2 style="margin-bottom: 4px;">Hello, <span class="gradient-text">${u.name.split(' ')[0]}</span> 👋</h2>
+                            <button class="btn-icon" title="Download Statement" onclick="Utils.generatePassbook(DB.getUser('${u.id}'))" style="color:var(--primary); border-color:var(--primary);"><span class="material-symbols-rounded">picture_as_pdf</span></button>
                         </div>
+                        <p class="text-muted" style="margin-bottom: 24px;">ID: ${u.id}</p>
+                        
+                        ${dueCheck.isDue ? `
+                            <div class="notice-board mb-3" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
+                                <span class="material-symbols-rounded text-danger">warning</span>
+                                <div>
+                                    <div class="text-sm font-bold text-danger">Payment Due: ₹${dueCheck.amount}</div>
+                                    <div class="text-xs text-muted">Please clear your monthly fund dues.</div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1)); text-align: center; padding: 32px 20px; border-color: rgba(14, 165, 233, 0.3);">
+                            <div class="text-muted text-sm mb-2 font-bold">My Fund Balance</div>
+                            <h1 style="font-size: 3.2rem; color: ${bal < 0 ? 'var(--danger)' : 'var(--text-main)'}; margin: 8px 0; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">${Utils.money(bal)}</h1>
+                            
+                            ${AppState.settings.upiId ? `
+                                <button class="btn btn-primary mt-3" style="width:auto; padding: 10px 24px; border-radius: 30px;" onclick="UI.openOnlinePaymentModal()">
+                                    <span class="material-symbols-rounded" style="font-size: 18px;">qr_code_scanner</span> Pay Online
+                                </button>
+                            ` : ''}
+                        </div>
+                        
                         <div class="stats-grid">
                             <div class="stat-card">
-                                <div class="icon" style="background: rgba(16,185,129,0.1); color: var(--success);"><span class="material-symbols-rounded">arrow_downward</span></div>
-                                <div class="text-xs text-muted">Total Deposited</div>
-                                <h3 style="font-size: 1.2rem;">${Utils.money(dep)}</h3>
+                                <div class="icon" style="background: rgba(16,185,129,0.15); color: var(--success);"><span class="material-symbols-rounded">arrow_downward</span></div>
+                                <div class="text-xs text-muted mb-1">Total Deposited</div>
+                                <h3 style="font-size: 1.3rem;">${Utils.money(dep)}</h3>
                             </div>
                             <div class="stat-card">
-                                <div class="icon" style="background: rgba(239,68,68,0.1); color: var(--danger);"><span class="material-symbols-rounded">arrow_upward</span></div>
-                                <div class="text-xs text-muted">Total Deducted</div>
-                                <h3 style="font-size: 1.2rem;">${Utils.money(ded)}</h3>
+                                <div class="icon" style="background: rgba(239,68,68,0.15); color: var(--danger);"><span class="material-symbols-rounded">arrow_upward</span></div>
+                                <div class="text-xs text-muted mb-1">Total Deducted</div>
+                                <h3 style="font-size: 1.3rem;">${Utils.money(ded)}</h3>
                             </div>
                         </div>
-                        <button class="btn btn-secondary" onclick="Router.go('profile', '${u.id}')">View Full History</button>
+                        
+                        <button class="btn btn-secondary mt-2 mb-4" onclick="Router.go('profile', '${u.id}')">View Full Statement</button>
+
+                        ${leaderboardHTML}
                     `;
                 }
 
+                // ==========================================
+                // ADMIN VIEW
+                // ==========================================
                 const txns = AppState.txns;
-                const students = AppState.users.filter(x => x.role === 'student');
                 let totFund = 0, totDep = 0, totDed = 0;
                 txns.forEach(t => {
                     if(t.type==='DEPOSIT') { totFund+=t.amount; totDep+=t.amount; }
                     if(t.type==='DEDUCTION') { totFund-=t.amount; totDed+=t.amount; }
                 });
 
+                const target = parseInt(AppState.settings.fundTarget) || 10000;
+                const percent = Math.min((totFund / target) * 100, 100).toFixed(1);
                 const recent = txns.slice(-5).reverse();
 
                 return `
-                    <h2 style="margin-bottom: 4px;">Cloud Dashboard</h2>
-                    <p class="text-muted" style="margin-bottom: 20px;">Welcome back, ${u.name.split(' ')[0]}</p>
+                    <h2 style="margin-bottom: 4px;">Management Panel</h2>
+                    <p class="text-muted" style="margin-bottom: 20px;">Welcome back, <span class="text-primary font-bold">${u.name.split(' ')[0]}</span></p>
                     
-                    <div class="card" style="text-align: center; padding: 24px;">
-                        <div class="text-muted text-sm">Total Fund Balance</div>
-                        <h1 style="font-size: 2.8rem; color: ${totFund < 0 ? 'var(--danger)' : 'var(--primary)'}; margin: 8px 0;">${Utils.money(totFund)}</h1>
+                    ${AppState.pending_txns.length > 0 ? `
+                        <div class="card flex-between" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.4); cursor:pointer; padding: 12px 20px;" onclick="Router.go('approvals')">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span class="material-symbols-rounded text-warning">pending_actions</span>
+                                <div class="text-sm font-bold text-warning">${AppState.pending_txns.length} Pending Approvals</div>
+                            </div>
+                            <span class="material-symbols-rounded text-warning">chevron_right</span>
+                        </div>
+                    ` : ''}
+
+                    <div class="card" style="text-align: center; padding: 24px; position:relative; overflow:hidden;">
+                        <div style="position:absolute; width:150px; height:150px; background:var(--primary); opacity:0.1; filter:blur(40px); top:-50px; left:-50px; border-radius:50%;"></div>
                         
-                        <div class="flex-center" style="gap: 12px; margin-top: 16px;">
-                            <button class="btn btn-primary" style="flex:1; padding: 12px;" onclick="UI.openFundModal('DEPOSIT')">+ Add</button>
-                            <button class="btn btn-danger" style="flex:1; padding: 12px;" onclick="UI.openFundModal('DEDUCTION')">- Deduct</button>
+                        <div class="text-muted text-sm font-bold relative z-10">Total Fund Balance</div>
+                        <h1 style="font-size: 3.2rem; color: ${totFund < 0 ? 'var(--danger)' : 'var(--text-main)'}; margin: 8px 0; text-shadow: 0 4px 20px rgba(0,0,0,0.5); position:relative; z-10;">${Utils.money(totFund)}</h1>
+                        
+                        <div class="mt-4 text-left relative z-10" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px;">
+                            <div class="flex-between text-xs text-muted mb-2">
+                                <span>Target: ${Utils.money(target)}</span>
+                                <span class="text-primary font-bold">${percent}%</span>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: ${percent}%;"></div>
+                            </div>
                         </div>
-                        <div class="flex-center" style="gap: 12px; margin-top: 12px;">
-                            <button class="btn btn-secondary" style="flex:1; padding: 10px; font-size: 0.85rem;" onclick="UI.openBulkDepositModal()">Bulk Deposit</button>
-                            <button class="btn btn-warning" style="flex:1; padding: 10px; font-size: 0.85rem;" onclick="UI.openBulkDeductModal()">Bulk Deduct (All)</button>
+
+                        <div class="flex-center" style="gap: 12px; margin-top: 24px; position:relative; z-10;">
+                            <button class="btn btn-primary" style="flex:1;" onclick="UI.openFundModal('DEPOSIT')"><span class="material-symbols-rounded" style="font-size:20px;">add</span> Add</button>
+                            <button class="btn btn-danger" style="flex:1;" onclick="UI.openFundModal('DEDUCTION')"><span class="material-symbols-rounded" style="font-size:20px;">remove</span> Deduct</button>
                         </div>
+                        <div class="flex-center" style="gap: 12px; margin-top: 12px; position:relative; z-10;">
+                            <button class="btn btn-secondary" style="flex:1; font-size: 0.85rem;" onclick="UI.openBulkDepositModal()">Bulk Add</button>
+                            <button class="btn btn-warning" style="flex:1; font-size: 0.85rem;" onclick="UI.openBulkDeductModal()">Bulk Deduct</button>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Chart (Rendered via JS) -->
+                    <div class="card">
+                        <h3 class="text-sm text-muted mb-3 font-bold">Fund Analytics Overview</h3>
+                        <canvas id="financeChart" height="200"></canvas>
                     </div>
                     
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="text-xs text-muted">Total Students</div>
+                            <div class="text-xs text-muted mb-1">Total Students</div>
                             <h3>${students.length}</h3>
                         </div>
                         <div class="stat-card">
-                            <div class="text-xs text-muted">Cloud Records</div>
+                            <div class="text-xs text-muted mb-1">Total Transactions</div>
                             <h3>${txns.length}</h3>
-                        </div>
-                        <div class="stat-card">
-                            <div class="text-xs text-muted text-success">Total Deposit</div>
-                            <h3 class="text-success" style="font-size:1.1rem;">${Utils.money(totDep)}</h3>
-                        </div>
-                        <div class="stat-card">
-                            <div class="text-xs text-muted text-danger">Total Deducted</div>
-                            <h3 class="text-danger" style="font-size:1.1rem;">${Utils.money(totDed)}</h3>
                         </div>
                     </div>
 
-                    <h3 style="margin: 24px 0 16px; font-size: 1.1rem;">Recent Activity</h3>
+                    ${leaderboardHTML}
+
+                    <div class="flex-between" style="margin: 24px 0 16px;">
+                        <h3 style="margin:0; font-size: 1.1rem;">Recent Activity</h3>
+                        <span class="text-xs text-primary" style="cursor:pointer;" onclick="Router.go('transactions')">View All</span>
+                    </div>
                     <div class="gap-3">
                         ${recent.length===0 ? '<p class="text-muted text-center">No transactions yet.</p>' : 
                           recent.map(t => `
@@ -552,66 +890,122 @@
                     </div>
                 `;
             },
+
+            // ==========================================
+            // PENDING APPROVALS VIEW (Admin)
+            // ==========================================
+            approvals: () => {
+                if(Auth.user.role === 'student') { Router.go('dashboard'); return ''; }
+                const pending = AppState.pending_txns;
+                
+                return `
+                    <div class="flex-between mb-3">
+                        <button class="btn-icon" onclick="Router.go('dashboard')"><span class="material-symbols-rounded">arrow_back</span></button>
+                        <h2 style="margin:0;">Pending UTRs</h2>
+                    </div>
+                    <p class="text-xs text-muted mb-4">Verify online payments submitted by students before approving.</p>
+                    
+                    <div class="gap-3">
+                        ${pending.length === 0 ? `
+                            <div class="card flex-center" style="flex-direction:column; padding:40px 20px;">
+                                <span class="material-symbols-rounded text-muted" style="font-size:48px; margin-bottom:12px;">check_circle</span>
+                                <p class="text-muted">No pending payments.</p>
+                            </div>
+                        ` : pending.map(p => `
+                            <div class="card" style="margin-bottom:0; padding:16px;">
+                                <div class="flex-between mb-2">
+                                    <div class="font-bold">${DB.getUser(p.studentId)?.name}</div>
+                                    <div class="text-success font-bold text-lg">${Utils.money(p.amount)}</div>
+                                </div>
+                                <div class="text-sm text-muted mb-1">UTR: <span class="text-main font-bold" style="letter-spacing:1px; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">${p.utr}</span></div>
+                                <div class="text-xs text-muted mb-4">${Utils.date(p.date)}</div>
+                                
+                                <div class="flex-center gap-2">
+                                    <button class="btn btn-secondary text-danger" style="flex:1; border-color:var(--danger);" onclick="FundService.rejectUTR('${p.id}')">Reject</button>
+                                    <button class="btn btn-success" style="flex:1;" onclick="FundService.approveUTR('${p.id}')">Approve</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            },
+
+            // ==========================================
+            // MEMBERS DIRECTORY
+            // ==========================================
             students: () => {
                 const users = [...AppState.users].sort((a, b) => a.name.localeCompare(b.name));
                 const superAdmins = users.filter(u => u.role === 'superadmin');
-                const admins = users.filter(u => u.role === 'admin');
-                const students = users.filter(u => u.role === 'student');
+                const admins = users.filter(u => u.role === 'admin' && u.status !== 'SUSPENDED');
+                const students = users.filter(u => u.role === 'student' && u.status !== 'SUSPENDED');
+                const suspended = users.filter(u => u.status === 'SUSPENDED');
                 
-                const getAdminCard = (s, badgeClass, badgeText) => `
-                    <div class="list-item search-item" style="padding: 12px; margin:0; cursor: pointer;" onclick="Router.go('profile', '${s.id}')">
+                const isAdmin = Auth.user.role !== 'student';
+
+                const getUserCard = (s, badgeClass, badgeText, hideFinancials = false) => {
+                    const bal = DB.calcBalance(s.id).bal;
+                    const dueCheck = Utils.checkDue(s.id);
+                    const isEarly = Utils.checkEarlyPayer(s.id);
+                    const isTop = AppState.txns.filter(t=>t.studentId===s.id && t.type==='DEPOSIT').reduce((acc,curr)=>acc+curr.amount,0) > 500; // Top donor mock logic
+                    
+                    const isNegative = bal < 0 && !hideFinancials;
+                    
+                    return `
+                    <div class="list-item search-item ${isNegative ? 'negative-bal-bg' : ''}" style="padding: 12px; margin:0; cursor: pointer;" onclick="Router.go('profile', '${s.id}')">
                         <div style="display:flex; gap:12px; align-items:center;">
-                            <div class="avatar" style="width:40px;height:40px;font-size:1rem;">${s.name.charAt(0)}</div>
+                            <div class="avatar" style="width:45px;height:45px;font-size:1.2rem; cursor:pointer; ${s.photo ? `background-image:url(${s.photo})`:''}" onclick="event.stopPropagation(); UI.openLightbox('${s.photo}')">${!s.photo ? s.name.charAt(0) : ''}</div>
                             <div>
-                                <div class="font-bold">${s.name}</div>
-                                <div class="text-xs text-muted">@${s.username}</div>
+                                <div class="font-bold" style="display:flex; align-items:center; gap:4px;">
+                                    ${s.name} 
+                                    ${(!hideFinancials && isEarly) ? `<span class="material-symbols-rounded text-success" style="font-size:14px;" title="Early Payer">verified</span>` : ''}
+                                </div>
+                                <div class="text-xs text-muted">${s.id}</div>
+                                ${(isAdmin && !hideFinancials && dueCheck.isDue) ? `<div class="text-xs text-danger font-bold mt-1">Due: ₹${dueCheck.amount}</div>` : ''}
                             </div>
                         </div>
-                        <span class="badge ${badgeClass}">${badgeText}</span>
+                        <div style="text-align:right;">
+                            ${!hideFinancials ? `<div class="font-bold ${isNegative ? 'text-danger' : 'text-primary'}">${Utils.money(bal)}</div>` : ''}
+                            <span class="badge ${badgeClass}" style="margin-top:6px; display:inline-block;">${badgeText}</span>
+                        </div>
                     </div>
-                `;
+                    `;
+                };
 
                 return `
                     <h2 style="margin-bottom: 20px;">Members Directory</h2>
                     <div class="search-box">
                         <span class="material-symbols-rounded">search</span>
-                        <input type="text" id="search-stu" placeholder="Search members..." onkeyup="UI.filterList('stu-list-container', this.value)">
+                        <input type="text" id="search-stu" placeholder="Search by name or ID..." onkeyup="UI.filterList('stu-list-container', this.value)">
                     </div>
                     <div id="stu-list-container">
-                        <h3 class="text-sm text-muted mt-4 mb-2">Management</h3>
+                        <h3 class="text-sm text-muted mt-4 mb-2 font-bold">Management</h3>
                         <div class="gap-3 mb-4">
-                            ${superAdmins.map(s => getAdminCard(s, 'superadmin', 'SUPER ADMIN')).join('')}
-                            ${admins.map(s => getAdminCard(s, 'admin', 'ADMIN')).join('')}
+                            ${superAdmins.map(s => getUserCard(s, 'superadmin', 'SUPER ADMIN', true)).join('')}
+                            ${admins.map(s => getUserCard(s, 'admin', 'ADMIN', true)).join('')}
                         </div>
-                        <h3 class="text-sm text-muted mb-2">Students (${students.length})</h3>
-                        <div class="gap-3">
-                            ${students.length === 0 ? '<p class="text-center text-muted">No students yet.</p>' : 
-                              students.map(s => {
-                                  const bal = DB.calcBalance(s.id).bal;
-                                  const isNegative = bal < 0;
-                                  return `
-                                  <div class="list-item search-item ${isNegative ? 'negative-bal-bg' : ''}" onclick="Router.go('profile', '${s.id}')" style="padding: 12px; margin:0;">
-                                      <div style="display:flex; gap:12px; align-items:center;">
-                                          <div class="avatar" style="width:40px;height:40px;font-size:1rem;">${s.name.charAt(0)}</div>
-                                          <div>
-                                              <div class="font-bold">${s.name}</div>
-                                              <div class="text-xs text-muted">${s.id}</div>
-                                          </div>
-                                      </div>
-                                      <div style="text-align:right;">
-                                          <div class="font-bold ${isNegative ? 'text-danger' : 'text-primary'}">${Utils.money(bal)}</div>
-                                          <span class="material-symbols-rounded text-muted" style="font-size:16px; margin-top:4px;">chevron_right</span>
-                                      </div>
-                                  </div>
-                                  `;
-                              }).join('')}
+                        
+                        <h3 class="text-sm text-muted mb-2 font-bold">Students (${students.length})</h3>
+                        <div class="gap-3 mb-4">
+                            ${students.length === 0 ? '<p class="text-center text-muted">No active students.</p>' : students.map(s => getUserCard(s, 'active', 'ACTIVE')).join('')}
                         </div>
+
+                        ${suspended.length > 0 ? `
+                            <h3 class="text-sm text-danger mb-2 font-bold">Suspended Accounts (${suspended.length})</h3>
+                            <div class="gap-3 mb-4">
+                                ${suspended.map(s => getUserCard(s, 'suspended', 'SUSPENDED', true)).join('')}
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             },
+
+            // ==========================================
+            // PROFILE VIEW
+            // ==========================================
             profile: (id) => {
                 const u = DB.getUser(id);
                 if(!u) return `<p>User not found</p>`;
+                
                 const { bal, dep, ded, count } = DB.calcBalance(id);
                 const txns = AppState.txns.filter(t => t.studentId === id).reverse();
                 
@@ -619,45 +1013,87 @@
                 const isSuper = Auth.user.role === 'superadmin';
                 const isAdminOrSuper = Auth.user.role !== 'student';
                 
-                let badgeClass = u.role === 'superadmin' ? 'superadmin' : (u.role === 'admin' ? 'admin' : 'active');
-                let badgeText = u.role === 'superadmin' ? 'SUPER ADMIN' : (u.role === 'admin' ? 'ADMIN' : 'STUDENT');
+                const dueCheck = Utils.checkDue(u.id);
+                const isEarly = Utils.checkEarlyPayer(u.id);
+                
+                let badgeClass = u.status === 'SUSPENDED' ? 'suspended' : (u.role === 'superadmin' ? 'superadmin' : (u.role === 'admin' ? 'admin' : 'active'));
+                let badgeText = u.status === 'SUSPENDED' ? 'SUSPENDED' : (u.role === 'superadmin' ? 'SUPER ADMIN' : (u.role === 'admin' ? 'ADMIN' : 'STUDENT'));
 
                 return `
-                    <button class="btn btn-secondary text-sm" style="width:auto; margin-bottom: 16px; padding: 6px 12px;" onclick="Router.go('students')">
-                        <span class="material-symbols-rounded" style="font-size:18px;">arrow_back</span> Back
-                    </button>
+                    <div class="flex-between mb-3">
+                        <button class="btn btn-secondary text-sm" style="width:auto; padding: 6px 12px; background:rgba(255,255,255,0.05);" onclick="Router.go('students')">
+                            <span class="material-symbols-rounded" style="font-size:18px;">arrow_back</span> Back
+                        </button>
+                        
+                        <div class="flex-center gap-2">
+                            ${(u.role === 'student') ? `
+                                <button class="btn-icon" title="Download Statement PDF" onclick="Utils.generatePassbook(DB.getUser('${u.id}'))" style="color:var(--primary); border-color:var(--primary);">
+                                    <span class="material-symbols-rounded" style="font-size:18px;">picture_as_pdf</span>
+                                </button>
+                            ` : ''}
+                            ${isSuper && !isMyAccount && u.role !== 'superadmin' ? `
+                                <button class="btn btn-secondary text-sm text-warning" style="width:auto; padding: 6px 12px; border-color:var(--warning);" onclick="UI.toggleStatus('${u.id}', '${u.status}')">
+                                    <span class="material-symbols-rounded" style="font-size:18px;">block</span> ${u.status === 'SUSPENDED' ? 'Unsuspend' : 'Suspend'}
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
                     
                     <div class="card flex-center" style="flex-direction:column; padding: 32px 20px; position:relative;">
-                        ${(isSuper && !isMyAccount && u.role !== 'superadmin') ? `
+                        ${(isSuper && !isMyAccount && u.role !== 'superadmin' && u.status !== 'SUSPENDED') ? `
                             <button class="btn-icon" style="position:absolute; top:16px; right:16px; border-color:var(--primary); color:var(--primary);" title="Change Role" onclick="UI.toggleRole('${u.id}', '${u.role}')">
                                 <span class="material-symbols-rounded" style="font-size:18px;">manage_accounts</span>
                             </button>
                         ` : ''}
                         
-                        <div class="avatar" style="width:80px; height:80px; font-size:2rem; margin-bottom:16px;">${u.name.charAt(0)}</div>
+                        <div class="avatar" style="width:100px; height:100px; font-size:3rem; margin-bottom:16px; cursor:pointer; ${u.photo ? `background-image:url(${u.photo})`:''}" onclick="UI.openLightbox('${u.photo}')">
+                            ${!u.photo ? u.name.charAt(0) : ''}
+                            ${(isMyAccount || isSuper) ? `
+                                <label class="avatar-edit" onclick="event.stopPropagation();">
+                                    <input type="file" accept="image/*" style="display:none;" onchange="UI.uploadPhoto(event, '${u.id}')">
+                                    <span class="material-symbols-rounded" style="font-size:14px;">photo_camera</span>
+                                </label>
+                            ` : ''}
+                        </div>
                         <h2>${u.name}</h2>
-                        <div class="text-muted mb-2">@${u.username} • ${u.id}</div>
-                        <span class="badge ${badgeClass} mt-2">${badgeText}</span>
+                        <div class="text-muted mb-2">@${u.username} • ${u.id} ${u.phone ? `• ${u.phone}` : ''}</div>
+                        
+                        <div class="flex-center gap-2 mt-2 flex-wrap">
+                            <span class="badge ${badgeClass}">${badgeText}</span>
+                            ${u.role === 'student' && isEarly ? `<span class="badge-punctual"><span class="material-symbols-rounded" style="font-size:12px;">verified</span> Early Payer</span>` : ''}
+                        </div>
                     </div>
 
-                    ${u.role === 'student' || isAdminOrSuper ? `
+                    ${(isAdminOrSuper && dueCheck.isDue && u.role === 'student') ? `
+                        <div class="notice-board mb-3" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <div class="text-sm font-bold text-danger">Due: ₹${dueCheck.amount}</div>
+                                <div class="text-xs text-muted">Missed monthly deadline.</div>
+                            </div>
+                            <button class="btn btn-success text-xs" style="width:auto; padding:6px 12px; gap:4px;" onclick="Utils.sendWhatsAppReminder('${u.phone}',${dueCheck.amount})">
+                                <span class="material-symbols-rounded" style="font-size:14px;">chat</span> Remind
+                            </button>
+                        </div>
+                    ` : ''}
+
+                    ${(u.role === 'student' || isAdminOrSuper) ? `
                         <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
                             <div class="stat-card" style="padding:12px; text-align:center;">
-                                <div class="text-xs text-muted">Balance</div>
-                                <div class="font-bold ${bal < 0 ? 'text-danger' : 'text-primary'}" style="font-size:1.1rem; margin-top:4px;">${Utils.money(bal)}</div>
+                                <div class="text-xs text-muted mb-1">Balance</div>
+                                <div class="font-bold ${bal < 0 ? 'text-danger' : 'text-primary'}" style="font-size:1.2rem;">${Utils.money(bal)}</div>
                             </div>
                             <div class="stat-card" style="padding:12px; text-align:center;">
-                                <div class="text-xs text-muted">Deposited</div>
-                                <div class="font-bold text-success" style="font-size:1.1rem; margin-top:4px;">${Utils.money(dep)}</div>
+                                <div class="text-xs text-muted mb-1">Deposited</div>
+                                <div class="font-bold text-success" style="font-size:1.2rem;">${Utils.money(dep)}</div>
                             </div>
                             <div class="stat-card" style="padding:12px; text-align:center;">
-                                <div class="text-xs text-muted">Deducted</div>
-                                <div class="font-bold text-warning" style="font-size:1.1rem; margin-top:4px;">${Utils.money(ded)}</div>
+                                <div class="text-xs text-muted mb-1">Deducted</div>
+                                <div class="font-bold text-warning" style="font-size:1.2rem;">${Utils.money(ded)}</div>
                             </div>
                         </div>
                     ` : ''}
 
-                    ${(isAdminOrSuper && u.role === 'student') ? `
+                    ${(isAdminOrSuper && u.role === 'student' && u.status !== 'SUSPENDED') ? `
                         <div class="flex-between gap-2" style="margin-bottom: 24px;">
                             <button class="btn btn-primary" onclick="UI.openFundModal('DEPOSIT', '${u.id}')">+ Add Fund</button>
                             <button class="btn btn-danger" onclick="UI.openFundModal('DEDUCTION', '${u.id}')">- Deduct</button>
@@ -665,17 +1101,19 @@
                     ` : ''}
 
                     ${(u.role === 'student' || txns.length > 0) ? `
-                        <h3 style="margin-bottom: 12px; margin-top: 10px;">Cloud History (${count})</h3>
-                        <div class="gap-3">
+                        <div class="flex-between" style="margin-bottom: 12px; margin-top: 10px;">
+                            <h3 style="margin:0;">Statement (${count})</h3>
+                        </div>
+                        <div class="gap-3 mb-4">
                             ${txns.length === 0 ? '<p class="text-center text-muted">No transaction history.</p>' : 
                               txns.map(t => `
                                 <div class="list-item" style="margin:0; padding:12px;">
                                     <div style="display:flex; gap:12px; align-items:center;">
-                                        <div class="icon" style="color:${t.type==='DEPOSIT'?'var(--success)':'var(--danger)'}">
-                                            <span class="material-symbols-rounded">${t.type==='DEPOSIT'?'add_circle':'remove_circle'}</span>
+                                        <div class="icon" style="color:${t.type==='DEPOSIT'?'var(--success)':'var(--danger)'}; background:${t.type==='DEPOSIT'?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)'}; padding:8px; border-radius:10px;">
+                                            <span class="material-symbols-rounded" style="font-size:20px;">${t.type==='DEPOSIT'?'add_circle':'remove_circle'}</span>
                                         </div>
                                         <div>
-                                            <div class="font-bold text-sm">${t.note || t.type}</div>
+                                            <div class="font-bold text-sm">${t.note}</div>
                                             <div class="text-xs text-muted">${Utils.date(t.date)} • By ${t.by}</div>
                                         </div>
                                     </div>
@@ -687,31 +1125,31 @@
                               `).join('')}
                         </div>
                     ` : ''}
-                    
-                    ${isMyAccount ? `
-                        <div style="margin-top: 40px; margin-bottom: 20px;">
-                            <button class="btn btn-secondary text-danger" onclick="Auth.logout()" style="border-color: rgba(239,68,68,0.3);">
-                                <span class="material-symbols-rounded">logout</span> Logout
-                            </button>
-                        </div>
-                    ` : ''}
                 `;
             },
+            // ==========================================
+            // TRANSACTIONS VIEW
+            // ==========================================
             transactions: () => {
                 const txns = [...AppState.txns].reverse();
                 return `
-                    <h2>All Transactions</h2>
+                    <div class="flex-between mb-3">
+                        <h2 style="margin:0;">Global Ledger</h2>
+                        ${Auth.user.role === 'superadmin' ? `<button class="btn-icon" title="Export CSV" onclick="UI.exportCSV('transactions')" style="color:var(--primary); border-color:var(--primary);"><span class="material-symbols-rounded" style="font-size:20px;">download</span></button>` : ''}
+                    </div>
+                    
                     <div class="search-box">
                         <span class="material-symbols-rounded">search</span>
-                        <input type="text" id="search-txn" placeholder="Search ID, Student or Note..." onkeyup="UI.filterList('txn-list', this.value)">
+                        <input type="text" id="search-txn" placeholder="Search records or note..." onkeyup="UI.filterList('txn-list', this.value)">
                     </div>
-                    <div id="txn-list" class="gap-3">
-                        ${txns.length === 0 ? '<p class="text-center text-muted">No transactions.</p>' : 
+                    
+                    <div id="txn-list" class="gap-3 mb-4">
+                        ${txns.length === 0 ? '<p class="text-center text-muted">No transactions recorded.</p>' : 
                           txns.map(t => `
                               <div class="list-item search-item" style="padding:12px; margin:0;" onclick="Router.go('profile', '${t.studentId}')">
                                   <div>
                                       <div class="font-bold text-sm">${DB.getUser(t.studentId)?.name || t.studentId}</div>
-                                      <div class="text-xs text-muted">${Utils.date(t.date)} •${t.note || 'No note'}</div>
+                                      <div class="text-xs text-muted">${Utils.date(t.date)} •${t.note}</div>
                                   </div>
                                   <div style="text-align:right;">
                                       <div class="font-bold ${t.type==='DEPOSIT'?'text-success':'text-danger'}">
@@ -724,21 +1162,103 @@
                     </div>
                 `;
             },
+
+            // ==========================================
+            // AUDIT LOGS VIEW
+            // ==========================================
+            logs: () => {
+                const logs = AppState.logs;
+                return `
+                    <div class="flex-between mb-3">
+                        <button class="btn-icon" onclick="Router.go('settings')"><span class="material-symbols-rounded">arrow_back</span></button>
+                        <h2 style="margin:0;">System Audit Logs</h2>
+                    </div>
+                    <p class="text-xs text-muted mb-3">Security logs mapping all high-level admin operations.</p>
+                    
+                    <div class="gap-3 mb-4">
+                        ${logs.length === 0 ? '<p class="text-center text-muted">No logs recorded.</p>' : 
+                          logs.map(l => `
+                              <div class="list-item" style="padding:12px; margin:0; flex-direction:column; align-items:flex-start;">
+                                  <div class="text-sm font-bold mb-1">${l.msg}</div>
+                                  <div class="text-xs text-muted">${Utils.date(l.date)} • ID: ${l.id}</div>
+                              </div>
+                          `).join('')}
+                    </div>
+                `;
+            },
+
+            // ==========================================
+            // SETTINGS VIEW
+            // ==========================================
             settings: () => {
                 const isSuper = Auth.user.role === 'superadmin';
                 return `
-                    <h2>Settings & Sync</h2>
+                    <h2>Settings & Control Panel</h2>
                     ${isSuper ? `
-                        <div class="card mt-3">
-                            <h3 class="text-sm text-primary mb-2">Admin Management</h3>
-                            <button class="btn btn-secondary text-sm" onclick="UI.openCreateAdminModal()">+ Create New Admin</button>
+                        <div class="stats-grid mt-3">
+                            <div class="stat-card" style="padding:12px; cursor:pointer;" onclick="UI.openCreateAdminModal()">
+                                <div class="icon" style="background:rgba(139, 92, 246, 0.2); color:var(--secondary);"><span class="material-symbols-rounded">person_add</span></div>
+                                <div class="text-sm font-bold">New Admin</div>
+                            </div>
+                            <div class="stat-card" style="padding:12px; cursor:pointer;" onclick="Router.go('logs')">
+                                <div class="icon" style="background:rgba(245, 158, 11, 0.2); color:var(--warning);"><span class="material-symbols-rounded">policy</span></div>
+                                <div class="text-sm font-bold">Audit Logs</div>
+                            </div>
                         </div>
+
+                        <!-- System Configuration -->
                         <div class="card">
-                            <h3 class="text-sm text-primary mb-2">Lightning Fast DB</h3>
-                            <p class="text-xs text-muted mb-3">All your data is securely stored in Google Firebase Cloud Firestore with instant local optimistic UI updates.</p>
-                            <button class="btn btn-secondary text-sm mb-3" style="border-color:var(--success); color:var(--success); pointer-events:none;">
-                                <span class="material-symbols-rounded">cloud_done</span> DB Synced
-                            </button>
+                            <h3 class="text-sm text-primary mb-3">App Configuration</h3>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Fund Target Goal (₹)</label>
+                                <input type="number" id="set-target" value="${AppState.settings.fundTarget || 10000}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">UPI ID for Payments</label>
+                                <input type="text" id="set-upi" value="${AppState.settings.upiId || ''}" placeholder="e.g. usub@ybl">
+                            </div>
+                            
+                            <hr style="border-color:var(--border); margin:16px 0;">
+                            
+                            <h3 class="text-sm text-danger mb-3">Monthly Dues & Defaulters</h3>
+                            <div class="form-group">
+                                <label class="form-label">Monthly Fee Amount (₹)</label>
+                                <input type="number" id="set-due-amt" value="${AppState.settings.dueAmount || 50}">
+                            </div>
+                            <div class="flex-between gap-2">
+                                <div class="form-group">
+                                    <label class="form-label">Start Day</label>
+                                    <input type="number" id="set-due-start" value="${AppState.settings.dueStartDay || 1}" min="1" max="31">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">End Day (Deadline)</label>
+                                    <input type="number" id="set-due-end" value="${AppState.settings.dueEndDay || 10}" min="1" max="31">
+                                </div>
+                            </div>
+                            
+                            <hr style="border-color:var(--border); margin:16px 0;">
+                            
+                            <h3 class="text-sm text-secondary mb-3">Telegram Notifications</h3>
+                            <div class="form-group">
+                                <label class="form-label">Bot Token</label>
+                                <input type="password" id="set-bot" value="${AppState.settings.botToken || ''}" placeholder="Paste BotFather Token">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Chat ID</label>
+                                <input type="text" id="set-chat" value="${AppState.settings.chatId || ''}" placeholder="Your Telegram Chat ID">
+                            </div>
+                            
+                            <button class="btn btn-primary" onclick="UI.saveSettings()">Save Configurations</button>
+                        </div>
+                        
+                        <!-- Data Export -->
+                        <div class="card mb-4">
+                            <h3 class="text-sm text-success mb-3">Data Management</h3>
+                            <div class="gap-2">
+                                <button class="btn btn-secondary text-sm" onclick="UI.exportCSV('students')"><span class="material-symbols-rounded">group</span> Export Students CSV</button>
+                                <button class="btn btn-secondary text-sm" onclick="UI.exportCSV('transactions')"><span class="material-symbols-rounded">receipt_long</span> Export Ledgers CSV</button>
+                            </div>
                         </div>
                     ` : `
                         <div class="card mt-3">
@@ -749,7 +1269,7 @@
             }
         };
 
-        // 7. UI CONTROLLERS (Instant Optimistic UI)
+        // 9. UI CONTROLLERS (Instant Modals & Logic)
         const UI = {
             filterList: (listId, query) => {
                 query = query.toLowerCase();
@@ -759,13 +1279,69 @@
                     else el.style.display = 'none';
                 });
             },
+            
+            updateBellIcon: () => {
+                if(Auth.user.role === 'student') return;
+                const bell = document.getElementById('admin-bell');
+                const badge = document.getElementById('bell-badge');
+                if(!bell) return;
+                
+                bell.classList.remove('hidden');
+                if(AppState.pending_txns.length > 0) {
+                    badge.style.display = 'block';
+                    bell.style.color = 'var(--warning)';
+                } else {
+                    badge.style.display = 'none';
+                    bell.style.color = 'var(--text-main)';
+                }
+            },
+
+            openLightbox: (src) => {
+                if(!src) return;
+                document.getElementById('lightbox-img').src = src;
+                document.getElementById('lightbox').style.display = 'flex';
+            },
+
+            renderChart: () => {
+                const ctx = document.getElementById('financeChart');
+                if(!ctx) return;
+                
+                let dep = 0, ded = 0;
+                AppState.txns.forEach(t => {
+                    if(t.type === 'DEPOSIT') dep += t.amount;
+                    if(t.type === 'DEDUCTION') ded += t.amount;
+                });
+
+                if(window.financeChartInstance) window.financeChartInstance.destroy();
+
+                window.financeChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Collected Fund', 'Project Expenses'],
+                        datasets: [{
+                            data: [dep, ded],
+                            backgroundColor: ['#10b981', '#ef4444'],
+                            borderWidth: 0,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '70%',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Outfit' } } }
+                        }
+                    }
+                });
+            },
+
             openModal: (title, html) => {
                 const c = document.getElementById('modal-container');
                 c.innerHTML = `
                     <div class="modal-overlay" id="active-modal" onclick="if(event.target===this) UI.closeModal()">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h3 style="margin:0">${title}</h3>
+                                <h3 style="margin:0;" class="gradient-text">${title}</h3>
                                 <button class="btn-icon" style="width:32px; height:32px;" onclick="UI.closeModal()"><span class="material-symbols-rounded" style="font-size:20px;">close</span></button>
                             </div>
                             <div>${html}</div>
@@ -776,23 +1352,95 @@
             },
             closeModal: () => {
                 const m = document.getElementById('active-modal');
-                if(m) { m.classList.remove('active'); setTimeout(() => m.remove(), 200); }
+                if(m) { m.classList.remove('active'); setTimeout(() => m.remove(), 300); }
             },
 
+            // Online Payment System
+            openOnlinePaymentModal: () => {
+                const upi = AppState.settings.upiId;
+                if(!upi) return Utils.toast('UPI not configured by Admin', 'error');
+                
+                const html = `
+                    <div id="pay-step-1">
+                        <div class="form-group">
+                            <label class="form-label">Enter Amount to Pay (₹)</label>
+                            <input type="number" id="pay-amt" min="1" placeholder="e.g. 50">
+                        </div>
+                        <button class="btn btn-primary mt-3" onclick="UI.generateUPI()">Generate Payment Link</button>
+                    </div>
+                    
+                    <div id="pay-step-2" class="hidden">
+                        <div class="card flex-center mb-3" style="flex-direction:column; background:rgba(255,255,255,0.05); border-color:var(--primary); padding:20px;">
+                            <img id="qr-img" src="" style="width:180px; height:180px; border-radius:12px; margin-bottom:16px; background:white; padding:8px;">
+                            <a id="upi-link" href="#" class="btn btn-success"><span class="material-symbols-rounded" style="font-size:18px;">phone_iphone</span> Pay via UPI App</a>
+                        </div>
+                        
+                        <div class="notice-board mt-2 mb-3" style="background:rgba(16, 185, 129, 0.1); border-color:rgba(16, 185, 129, 0.3);">
+                            <span class="material-symbols-rounded text-success">info</span>
+                            <p class="text-xs text-main" style="margin:0;">After successful payment, enter the 12-digit UTR/Ref number below to verify.</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Enter UTR / Ref Number (Required)</label>
+                            <input type="text" id="pay-utr" placeholder="e.g. 320912345678">
+                        </div>
+                        
+                        <div class="flex-between gap-2 mt-4">
+                            <button class="btn btn-secondary text-danger" style="flex:1;" onclick="UI.cancelOnlinePayment()">Cancel</button>
+                            <button class="btn btn-primary" style="flex:1;" onclick="UI.submitOnlinePayment()">Submit UTR</button>
+                        </div>
+                    </div>
+                `;
+                UI.openModal('Pay Online via UPI', html);
+            },
+            generateUPI: () => {
+                const amt = document.getElementById('pay-amt').value;
+                if(!amt || amt <= 0) return Utils.toast('Enter valid amount', 'error');
+                
+                const upi = AppState.settings.upiId;
+                const link = `upi://pay?pa=${upi}&pn=StudentFund&am=${amt}&cu=INR`;
+                
+                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(link)}`;
+                document.getElementById('upi-link').href = link;
+                
+                document.getElementById('pay-step-1').classList.add('hidden');
+                document.getElementById('pay-step-2').classList.remove('hidden');
+            },
+            submitOnlinePayment: () => {
+                const amt = document.getElementById('pay-amt').value;
+                const utr = document.getElementById('pay-utr').value.trim();
+                if(!utr || utr.length < 6) return Utils.toast('Please enter a valid UTR number', 'error');
+                
+                const res = FundService.submitUTR(amt, utr);
+                if(res.success) {
+                    Utils.toast('UTR Submitted. Waiting for Admin approval.');
+                    UI.closeModal();
+                }
+            },
+            cancelOnlinePayment: () => {
+                const amt = document.getElementById('pay-amt').value;
+                if(amt) {
+                    DB.saveLogAsync(`⚠️ GHOST PAYMENT: ${Auth.user.name} generated link for ₹${amt} but canceled.`);
+                    Utils.notifyTelegram(`<b>⚠️ GHOST PAYMENT ALERT</b>\n\n👤 <b>Student:</b> ${Auth.user.name}\n💵 <b>Amount:</b> ₹${amt}\n\n<i>Student generated the QR/Link but canceled without submitting a UTR.</i>`);
+                }
+                UI.closeModal();
+            },
+
+            // Modals
             openFundModal: (type, prefillId = '') => {
-                const students = AppState.users.filter(u => u.role === 'student').sort((a,b) => a.name.localeCompare(b.name));
+                const students = AppState.users.filter(u => u.role === 'student' && u.status !== 'SUSPENDED').sort((a,b) => a.name.localeCompare(b.name));
                 const isDep = type === 'DEPOSIT';
                 const html = `
                     <div class="form-group">
-                        <label class="form-label">Select Student</label>
-                        <select id="mod-stu" required>
+                        <label class="form-label">Select Active Student</label>
+                        <select id="mod-stu" required style="background:rgba(255,255,255,0.05);">
                             <option value="">-- Choose Student --</option>
                             ${students.map(s => `<option value="${s.id}" ${s.id===prefillId?'selected':''}>${s.name} (${s.id})</option>`).join('')}
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Amount (₹)</label>
-                        <input type="number" id="mod-amt" min="1" required placeholder="e.g. 100">
+                        <input type="number" id="mod-amt" min="1" required placeholder="e.g. 50">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Note / Reason</label>
@@ -806,26 +1454,21 @@
                 const stuId = document.getElementById('mod-stu').value;
                 const amt = document.getElementById('mod-amt').value;
                 const note = document.getElementById('mod-note').value;
-
                 if(!stuId || !amt) return Utils.toast('Fill amount and student', 'error');
 
-                // INSTANT EXECUTION (No await)
                 const res = FundService.processSingle(stuId, amt, type, note);
-                
                 if(res.success) {
-                    Utils.toast(type === 'DEPOSIT' ? 'Added instantly!' : 'Deducted instantly!');
+                    Utils.toast(type === 'DEPOSIT' ? 'Fund Added!' : 'Fund Deducted!');
                     UI.closeModal();
                     if(Router.current === 'profile') Router.go('profile', stuId);
                     else Router.go(Router.current);
-                } else {
-                    Utils.toast(res.msg, 'error');
-                }
+                } else Utils.toast(res.msg, 'error');
             },
 
             openBulkDepositModal: () => {
-                const students = AppState.users.filter(u => u.role === 'student').sort((a,b) => a.name.localeCompare(b.name));
+                const students = AppState.users.filter(u => u.role === 'student' && u.status !== 'SUSPENDED').sort((a,b) => a.name.localeCompare(b.name));
                 const html = `
-                    <div class="form-group"><label class="form-label">Amount (₹)</label><input type="number" id="bd-amt" min="1" required placeholder="e.g. 50"></div>
+                    <div class="form-group"><label class="form-label">Amount per student (₹)</label><input type="number" id="bd-amt" min="1" required placeholder="e.g. 50"></div>
                     <div class="form-group"><label class="form-label">Note</label><input type="text" id="bd-note" placeholder="e.g. Monthly collection"></div>
                     <div class="flex-between mb-2 mt-4"><label class="form-label mb-0">Select Students</label><button class="btn-secondary text-xs" style="padding:4px 8px; border-radius:4px;" onclick="UI.toggleCheckboxes('bd-list')">Toggle All</button></div>
                     <div class="student-check-list" id="bd-list">
@@ -847,61 +1490,79 @@
             },
             submitBulkDeposit: () => {
                 const amt = document.getElementById('bd-amt').value;
-                const note = document.getElementById('bd-note').value || 'Bulk Deposit';
+                const note = document.getElementById('bd-note').value;
                 const checkedBoxes = Array.from(document.querySelectorAll('#bd-list .stu-checkbox:checked')).map(b => b.value);
 
                 if(!amt || checkedBoxes.length === 0) return Utils.toast('Select students and amount', 'error');
 
-                // INSTANT EXECUTION (No await)
                 const res = FundService.processBulk(checkedBoxes, amt, 'DEPOSIT', note);
-                
                 if(res.success) {
                     Utils.toast(`Success: Deposited to ${res.count} students!`);
                     UI.closeModal(); Router.go(Router.current);
-                } else {
-                    Utils.toast(res.msg, 'error');
-                }
+                } else Utils.toast(res.msg, 'error');
             },
 
             openBulkDeductModal: () => {
-                const count = AppState.users.filter(u => u.role === 'student').length;
+                const count = AppState.users.filter(u => u.role === 'student' && u.status !== 'SUSPENDED').length;
                 const html = `
-                    <div class="card" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
-                        <p class="text-sm text-warning" style="margin:0;"><strong>Warning:</strong> Deducting from <strong>ALL ${count} Students</strong> instantly.</p>
+                    <div class="notice-board">
+                        <span class="material-symbols-rounded">warning</span>
+                        <p class="text-sm text-warning" style="margin:0;">Deducting from <strong>ALL ${count} Active Students</strong> simultaneously for a common project.</p>
                     </div>
                     <div class="form-group"><label class="form-label">Deduction Amount (₹)</label><input type="number" id="bda-amt" min="1" required placeholder="e.g. 30"></div>
-                    <div class="form-group"><label class="form-label">Expense Reason</label><input type="text" id="bda-note" required placeholder="e.g. Project Item"></div>
-                    <button class="btn btn-warning" onclick="UI.submitBulkDeduct()" id="bda-btn" style="margin-top: 10px; color:#fff; background:var(--warning);">Deduct from ALL</button>
+                    <div class="form-group"><label class="form-label">Expense Reason</label><input type="text" id="bda-note" required placeholder="e.g. Event Decoration"></div>
+                    <button class="btn btn-warning" onclick="UI.submitBulkDeduct()" id="bda-btn" style="margin-top: 10px;">Deduct from ALL</button>
                 `;
-                UI.openModal('Bulk Deduct', html);
+                UI.openModal('Project Expense (Bulk)', html);
             },
             submitBulkDeduct: () => {
                 const amt = document.getElementById('bda-amt').value;
                 const note = document.getElementById('bda-note').value;
-
                 if(!amt || !note) return Utils.toast('Amount and Reason mandatory', 'error');
                 if(!confirm(`Deduct ₹${amt} from EVERY student?`)) return;
 
-                const studentIds = AppState.users.filter(u => u.role === 'student').map(u => u.id);
-                
-                // INSTANT EXECUTION (No await)
+                const studentIds = AppState.users.filter(u => u.role === 'student' && u.status !== 'SUSPENDED').map(u => u.id);
                 const res = FundService.processBulk(studentIds, amt, 'DEDUCTION', note);
                 
                 if(res.success) {
                     Utils.toast(`Success: Deducted from ${res.count} students!`);
                     UI.closeModal(); Router.go(Router.current);
-                } else {
-                    Utils.toast(res.msg, 'error'); 
+                } else Utils.toast(res.msg, 'error'); 
+            },
+
+            uploadPhoto: (event, userId) => {
+                const file = event.target.files[0];
+                if(file) {
+                    Utils.toast('Optimizing photo...', 'info');
+                    Utils.compressImage(file, (base64Img) => {
+                        let user = DB.getUser(userId);
+                        user.photo = base64Img;
+                        DB.saveUserAsync(user);
+                        Utils.toast('Photo Updated!');
+                        Router.go('profile', userId);
+                    });
                 }
             },
 
             toggleRole: (userId, currentRole) => {
                 const newRole = currentRole === 'student' ? 'admin' : 'student';
-                if(confirm(`Change role to ${newRole.toUpperCase()}?`)) {
+                if(confirm(`Promote/Demote user to ${newRole.toUpperCase()}?`)) {
                     let user = DB.getUser(userId);
                     user.role = newRole;
-                    DB.saveUserAsync(user); // INSTANT LOCAL + ASYNC CLOUD
+                    DB.saveUserAsync(user);
+                    DB.saveLogAsync(`🔄 ROLE CHANGE: ${user.name} is now ${newRole} by ${Auth.user.name}`);
                     Utils.toast(`Role updated instantly`);
+                    Router.go('profile', userId);
+                }
+            },
+            toggleStatus: (userId, currentStatus) => {
+                const newStatus = currentStatus === 'SUSPENDED' ? 'ACTIVE' : 'SUSPENDED';
+                if(confirm(`Are you sure you want to ${newStatus} this account?`)) {
+                    let user = DB.getUser(userId);
+                    user.status = newStatus;
+                    DB.saveUserAsync(user);
+                    DB.saveLogAsync(`🛑 STATUS CHANGE: ${user.name} is now ${newStatus} by ${Auth.user.name}`);
+                    Utils.toast(`Account ${newStatus}`);
                     Router.go('profile', userId);
                 }
             },
@@ -913,29 +1574,57 @@
                     <div class="form-group"><label class="form-label">Password</label><input type="password" id="ca-pass"></div>
                     <button class="btn btn-primary" onclick="UI.submitAdmin()" id="ca-btn" style="margin-top: 10px;">Create Admin</button>
                 `;
-                UI.openModal('Create Admin', html);
+                UI.openModal('Create New Admin', html);
             },
             submitAdmin: () => {
                 const name = document.getElementById('ca-name').value.trim();
                 const user = document.getElementById('ca-user').value.trim();
                 const pass = document.getElementById('ca-pass').value;
-                
                 if(!name || !user || !pass) return Utils.toast('Fill all fields', 'error');
                 if(AppState.users.find(u => u.username.toLowerCase() === user.toLowerCase())) return Utils.toast('Username taken', 'error');
 
                 const newAdmin = {
                     id: 'ADM-' + Date.now().toString().slice(-5),
-                    name, username: user, password: Utils.hash(pass),
-                    role: 'admin', status: 'ACTIVE', joinDate: new Date().toISOString()
+                    name, username: user, password: Utils.hash(pass), phone: '',
+                    role: 'admin', status: 'ACTIVE', joinDate: new Date().toISOString(), photo: ''
                 };
                 
-                DB.saveUserAsync(newAdmin); // INSTANT LOCAL + ASYNC CLOUD
+                DB.saveUserAsync(newAdmin);
+                DB.saveLogAsync(`🛡️ NEW ADMIN: ${name} created by ${Auth.user.name}`);
                 Utils.toast('Admin created instantly');
                 UI.closeModal();
+            },
+
+            saveSettings: () => {
+                AppState.settings.fundTarget = document.getElementById('set-target').value;
+                AppState.settings.upiId = document.getElementById('set-upi').value;
+                AppState.settings.botToken = document.getElementById('set-bot').value;
+                AppState.settings.chatId = document.getElementById('set-chat').value;
+                
+                AppState.settings.dueAmount = document.getElementById('set-due-amt').value;
+                AppState.settings.dueStartDay = document.getElementById('set-due-start').value;
+                AppState.settings.dueEndDay = document.getElementById('set-due-end').value;
+                
+                DB.saveSettingsAsync();
+                DB.saveLogAsync(`⚙️ SETTINGS UPDATED by ${Auth.user.name}`);
+                Utils.toast('Configuration Saved!');
+                Router.go('settings');
+            },
+            
+            exportCSV: (type) => {
+                if(type === 'students') {
+                    const data = AppState.users.map(u => ({ ID: u.id, Name: u.name, Username: u.username, Phone: u.phone, Role: u.role, Status: u.status, JoinDate: Utils.date(u.joinDate) }));
+                    Utils.downloadCSV(data, 'StudentFund_Members.csv');
+                } else if(type === 'transactions') {
+                    const data = AppState.txns.map(t => ({ TXN_ID: t.id, Date: Utils.date(t.date), StudentID: t.studentId, Type: t.type, Amount: t.amount, Note: t.note, PerformedBy: t.by }));
+                    Utils.downloadCSV(data, 'StudentFund_Ledger.csv');
+                }
+                Utils.toast('Exporting CSV File...');
+                DB.saveLogAsync(`📥 EXPORT: ${type.toUpperCase()} downloaded by ${Auth.user.name}`);
             }
         };
 
-        // 8. AUTHENTICATION UI
+        // 10. AUTHENTICATION UI
         const AuthUI = {
             switchTab: (tab) => {
                 document.getElementById('tab-login').classList.remove('active');
@@ -947,15 +1636,14 @@
             },
             login: (e) => {
                 e.preventDefault();
-                const u = document.getElementById('login-user').value;
-                const p = document.getElementById('login-pass').value;
-                const res = Auth.login(u, p);
+                const res = Auth.login(document.getElementById('login-user').value, document.getElementById('login-pass').value);
                 if (res.success) AppStarter.launchApp();
                 else Utils.toast(res.msg, 'error');
             },
             register: (e) => {
                 e.preventDefault();
                 const name = document.getElementById('reg-name').value.trim();
+                const phone = document.getElementById('reg-phone').value.trim();
                 const user = document.getElementById('reg-user').value.trim();
                 const pass = document.getElementById('reg-pass').value;
 
@@ -963,16 +1651,13 @@
 
                 const seq = AppState.settings.stuSeq;
                 const newId = Utils.genId('STU', seq);
-                
-                const newStudent = {
-                    id: newId, name, username: user, password: Utils.hash(pass),
-                    role: 'student', status: 'ACTIVE', joinDate: new Date().toISOString()
-                };
+                const newStudent = { id: newId, name, username: user, phone: phone, password: Utils.hash(pass), role: 'student', status: 'ACTIVE', joinDate: new Date().toISOString(), photo: '' };
 
-                // INSTANT UPDATE
                 AppState.settings.stuSeq = seq + 1;
                 DB.saveSettingsAsync();
                 DB.saveUserAsync(newStudent);
+                
+                Utils.notifyTelegram(`<b>👋 NEW REGISTRATION</b>\n\n👤 <b>Name:</b> ${name}\n📱 <b>Phone:</b> ${phone}\n🆔 <b>ID:</b> ${newId}\n@ <b>Username:</b> ${user}`);
                 
                 Utils.toast(`Success! Your ID is ${newId}.`);
                 AuthUI.switchTab('login');
@@ -981,16 +1666,13 @@
             }
         };
 
-        // EXPOSE TO GLOBAL SCOPE
-        window.AuthUI = AuthUI; window.Router = Router; window.UI = UI; window.Auth = Auth;
+        // EXPOSE TO GLOBAL
+        window.AuthUI = AuthUI; window.Router = Router; window.UI = UI; window.Auth = Auth; window.FundService = FundService; window.Utils = Utils; window.DB = DB; window.AppState = AppState;
 
-        // 9. APP INITIALIZATION
+        // 11. APP INITIALIZATION
         const AppStarter = {
             init: async () => {
-                // Wait for high-speed parallel Firebase fetching
                 const dbSuccess = await DB.init();
-                
-                // Hide Loader instantly
                 document.getElementById('loader-view').style.display = 'none';
 
                 if(dbSuccess) {
@@ -1012,11 +1694,11 @@
                 document.getElementById('main-nav').style.justifyContent = isStu ? 'space-evenly' : 'space-around';
 
                 Router.go('dashboard');
+                UI.updateBellIcon();
             }
         };
 
         document.addEventListener('DOMContentLoaded', AppStarter.init);
-
     </script>
 </body>
-  </html>
+</html>
